@@ -8,29 +8,26 @@
   */
 int _printf(const char *format, ...)
 {
-	char *print_buffer;
+	char *print;
 	int printed, state;
 	va_list args;
 
 	printed = state = 0;
 	if (format == NULL)
 		return (0);
-	print_buffer = malloc(BUFFERSIZE);
-	if (print_buffer == NULL)
+	print = malloc(BUFFERSIZE);
+	if (print == NULL)
 	{
 		_puts("Cannot allocate memory\n");
 		exit(12);
 	}
 	va_start(args, format);
-	mem_set(print_buffer, BUFFERSIZE);
-	state = _getchar(format, print_buffer, args, &printed);
+	mem_set(print, BUFFERSIZE);
+	state = _getchar(format, print, &args);
 	if (state == -1)
-	{
-		_puts("Function not implemented\n");
-		exit(38);
-	}
-	printed += _puts(print_buffer);
-	free(print_buffer);
+		return (-1);
+	printed = _puts(print);
+	free(print);
 	va_end(args);
 	return (printed);
 }
@@ -38,35 +35,42 @@ int _printf(const char *format, ...)
   *_getchar - parses that program's input parameters in preparation for
   *printing
   *@format: the last parameter before the va_list args
-  *@print_buffer: buffer used to store characters before printing
+  *@print: buffer used to store characters before printing
   *@args: va_list args used to store the input parameters
-  *@printed: pointer to variable used to store the number of printed characters
   *
   *Return: -1 on failure, 0 otherwise
   */
-int _getchar(const char *format, char *print_buffer, va_list args __attribute__((unused)), int *printed)
+int _getchar(const char *format, char *print, va_list *args)
 {
 	static int pos;
 
 	while (*format != '\0')
 	{
-		if (pos == BUFFERSIZE - 1)
+		if (pos == BUFFERSIZE - 2)
 		{
-			print_buffer[pos] = '\0';
-			*printed += _puts(print_buffer);
+			print[pos] = '\0';
+			_puts(print);
 			pos = 0;
 		}
 		switch (*format)
 		{
 			case ('%'):
+				if (*(++format) == '%')
+					print[pos] = *format;
+				else
+				{
+					pos = pram(*format)(print, pos, args);
+					if (pos == -1)
+						return (-1);
+				}
 				break;
 			default:
-				print_buffer[pos] = *format;
+				print[pos] = *format;
 				break;
 		}
 		pos++;
 		format++;
 	}
-	print_buffer[pos] = '\0';
+	print[pos] = '\0';
 	return (0);
 }

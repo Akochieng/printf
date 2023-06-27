@@ -13,5 +13,5 @@ void mem_set(char *s, int size)
 	int counter;
 
 	for (counter = 0; counter < size; counter++)
-		s[counter] = 0;
+		s[counter] = '\0';
 }

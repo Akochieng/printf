@@ -11,12 +11,14 @@
   */
 int _puts(char *s)
 {
+	static int printed;
 	size_t len = 0;
 
 	len = _strlen(s);
 	if (len == 0)
 		return (len);
-	return (write(1, s, len));
+	printed += write(1, s, len);
+	return (printed);
 }
 /**
   *_strlen - compute the length of a string

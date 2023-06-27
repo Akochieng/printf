@@ -1,26 +1,21 @@
 #include "main.h"
-
-
-int (*formatit(char c))(va_list args)
+/**
+  *pram - function pointer to select the right function
+  *@fmt: the specifier
+  *
+  *Return: NULL or pointer to the function
+  */
+int (*pram(char fmt))(char *, int, va_list *)
 {
 	int i;
-	form specs[] = {
-	{'c', _putchar},
-	{'s', _puts},
-	{'d', printint},
-	{'i', printint},
-	{'b', printb},
-	{'u', printu},
-	{'o', printo},
-	{'x', printx},
-	{'X', printX},
-	{'S', printS},
-	{'p', printp},
-	{'%', printperc},
-	{ '\0', NULL}
-	}
 
-	for (i = 0; specs[i].spec != '\0'; i++)
-		if (specs[i].spec == c)
-			return (specs[i].f(va_list args));
+	form arglist[] = {
+		{'c', copychar},
+		{'s', copystr},
+		{'\0', NULL}
+	};
+	for (i = 0; arglist[i].spec != '\0'; i++)
+		if (arglist[i].spec == fmt)
+			return (arglist[i].f);
+	return (NULL);
 }
