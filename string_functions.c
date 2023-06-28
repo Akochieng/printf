@@ -1,5 +1,6 @@
 #include "main.h"
 #include <unistd.h>
+#include <stdio.h>
 /**
   *_puts - function to print a string of characters
   *@s: pointer to the memory location storing the string
@@ -9,14 +10,18 @@
   *the contents of the print_buffer
   *Return: the number of characters printed
   */
-int _puts(char *s)
+int _puts(char *s, int action)
 {
 	static int printed;
 	size_t len = 0;
 
 	len = _strlen(s);
 	if (len == 0)
+	{
+		if (action == reset)
+			printed = 0;
 		return (len);
+	}
 	printed += write(1, s, len);
 	return (printed);
 }

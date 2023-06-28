@@ -18,7 +18,7 @@ int _printf(const char *format, ...)
 	print = malloc(BUFFERSIZE);
 	if (print == NULL)
 	{
-		_puts("Cannot allocate memory\n");
+		_puts("Cannot allocate memory\n", reset);
 		exit(12);
 	}
 	va_start(args, format);
@@ -26,7 +26,9 @@ int _printf(const char *format, ...)
 	state = _getchar(format, print, &args);
 	if (state == -1)
 		return (-1);
-	printed = _puts(print);
+	printed = _puts(print, set);
+	_puts(NULL, reset);
+	mem_set(print, BUFFERSIZE);
 	free(print);
 	va_end(args);
 	return (printed);
@@ -42,14 +44,14 @@ int _printf(const char *format, ...)
   */
 int _getchar(const char *format, char *print, va_list *args)
 {
-	static int pos;
+	int pos = 0;
 
 	while (*format != '\0')
 	{
 		if (pos == BUFFERSIZE - 2)
 		{
 			print[pos] = '\0';
-			_puts(print);
+			_puts(print, set);
 			pos = 0;
 		}
 		switch (*format)

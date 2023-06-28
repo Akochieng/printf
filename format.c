@@ -12,6 +12,7 @@ int (*pram(char fmt))(char *, int, va_list *)
 	form arglist[] = {
 		{'c', copychar},
 		{'s', copystr},
+		{'u', unsignedint},
 		{'\0', NULL}
 	};
 	for (i = 0; arglist[i].spec != '\0'; i++)

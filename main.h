@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #define BUFFERSIZE 1024
+#define reset 0
+#define set 1
 /**
   *form: typedef for the struct format
   *struct format - stores the format specifier and associated function
@@ -17,12 +19,15 @@ typedef struct form
 	int (*f)(char *, int, va_list *);
 } form;
 
-int _puts(char *s);
+int _puts(char *s, int action);
 size_t _strlen(char *s);
 int _customstrcat(char *src, char *dest, int pos);
 
 int copychar(char *prt, int pos, va_list *ag);
 int copystr(char *prt, int pos, va_list *ag);
+int unsignedint(char *prt, int pos, va_list *ag);
+int signedint(char *prt, int pos, va_list *ag);
+int copysizet(char *prt, int pos, size_t num);
 
 void mem_set(char *s, int size);
 
